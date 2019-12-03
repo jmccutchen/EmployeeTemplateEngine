@@ -1,5 +1,9 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
+const Engineer = require("./lib/Engineer.js")
+const Manager = require("./lib/Manager.js")
+const Intern = require("./lib/Intern.js")
+const Employee = require("./lib/Employee.js")
 
 // questions for user
 
@@ -8,9 +12,14 @@ function promptUser() {
 
         .prompt([
             {
+                type: "input",
+                name: "name",
+                message: "Employee name"
+            },            
+            {
                 type: "list",
-                name: "jobtype",
-                message: "What job type to enter? Pick one.",
+                name: "role",
+                message: "What job type to enter?",
                 choices: ["Engineer", "Intern", "Manager"]
             },
             {
@@ -20,8 +29,8 @@ function promptUser() {
             }
         ])
         .then(answers => {
-            console.log(answers)
-            if (answers.jobtype === "Engineer") {
+            
+            if (answers.role === "Engineer") {
                 inquirer.prompt([
                     {
                         type: "input",
@@ -29,7 +38,7 @@ function promptUser() {
                         message: "GitHub username?"
                     }
                 ])
-            } else if (answers.jobtype === "Intern") {
+            } else if (answers.role === "Intern") {
                 inquirer.prompt([
                     {
                         type: "input",
@@ -37,20 +46,23 @@ function promptUser() {
                         message: "Name of school?"
                     }
                 ])
-            } else if (answers.jobtype === "Manager") {
+            } else if (answers.role === "Manager") {
                 inquirer.prompt([
                     {
                         type: "input",
-                        name: "officeNum",
+                        name: "officeNumber",
                         message: "Office number?"
                     }
                 ])
             }
+            
         })
         
 }
 
 promptUser()
+
+module.exports = promptUser
  
 
 
