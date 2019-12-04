@@ -1,3 +1,5 @@
+// building team ask for manager name, ask to add intern, or engineer in a multiple choice, ask for ID number,look at last project for week 10, 
+
 const inquirer = require("inquirer");
 const fs = require("fs");
 const Engineer = require("./lib/Engineer.js")
