@@ -16,20 +16,15 @@ teamArray = [];
 function promptManager() {
     return inquirer
         .prompt([
-            {
-                type: "list",
-                name: "role",
-                message: "Select manager",
-                choices: ["Manager"]
-            },
+
             {
                 type: "input",
-                name: "name",
+                name: "managerName",
                 message: "Enter Manager Name"
             },
             {
                 type: "input",
-                name: "ID",
+                name: "managerID",
                 message: "Enter ID number",
                 validate: answer => {
                     if (IDArray.includes(answer)) {
@@ -41,7 +36,7 @@ function promptManager() {
             },
             {
                 type: "input",
-                name: "email",
+                name: "managerEmail",
                 message: "What is manager's email address"
             },
             {
@@ -51,18 +46,16 @@ function promptManager() {
             }
         ])
         .then((answers) => {
-            const manager = new Manager(answers.name, answers.role, answers.ID, answers.email, answers.officeNumber);
+            const manager = new Manager(answers.managerName, answers.managerID, answers.managerEmail, answers.officeNumber);
             teamArray.push(manager);
-            IDArray.push(answers.ID);
-
-
+            IDArray.push(answers.managerID);
             makeTeam()
 
         });
 
 };
 
-// question to continue
+// question to continue or not
 function makeTeam() {
     return inquirer
 
@@ -74,27 +67,48 @@ function makeTeam() {
             }
         ])
         .then(answers => {
-            if (answers.makeTeam){
+            if (answers.makeTeam) {
                 promptUser();
             } else {
                 return;
             }
         })
-}
+};
 
 // questions to create employee
 function promptUser() {
     return inquirer
 
-        .prompt([ 
+        .prompt([
+            {
+                type: "list",
+                name: "role",
+                message: "What employee role to enter?",
+                choices: ["Engineer", "Intern"]
+            }
+        ])
+        .then((answers) => {
+            if (answers.role === "Engineer") {
+                promptEngineer()
+
+            } else {
+                promptIntern()
+            }
+        });
+}
+
+// questions to create engineer
+function promptEngineer() {
+    return inquirer
+        .prompt([
             {
                 type: "input",
-                name: "name",
+                name: "engineerName",
                 message: "Employee name"
             },
             {
                 type: "input",
-                name: "ID",
+                name: "engineerID",
                 message: "Enter ID number",
                 validate: answer => {
                     if (IDArray.includes(answer)) {
@@ -105,51 +119,72 @@ function promptUser() {
                 }
             },
             {
-                type: "list",
-                name: "role",
-                message: "What employee role to enter?",
-                choices: ["Engineer", "Intern"]
+                type: "input",
+                name: "engineerEmail",
+                message: "What is the email address?"
             },
             {
                 type: "input",
-                name: "email",
-                message: "What is the email address?"
+                name: "github",
+                message: "GitHub username?"
             }
         ])
         .then(answers => {
-
-            if (answers.role === "Engineer") {
-                inquirer.prompt([
-                    {
-                        type: "input",
-                        name: "github",
-                        message: "GitHub username?"
-                    }
-                ])
-                .then(answers => {
-                    const engineer = new Engineer(answers.name, answers.role, answers.ID, answers.email, answers.github);
-                    teamArray.push(engineer);
-                    IDArray.push(answers.ID);
-                    makeTeam();
-                })
-            } else if (answers.role === "Intern") {
-                inquirer.prompt([
-                    {
-                        type: "input",
-                        name: "school",
-                        message: "Name of school?"
-                    }
-                ])
-                .then(answers => {
-                    const intern = new Intern(answers.name, answers.role, answers.ID, answers.email, answers.school);
-                    teamArray.push(intern);
-                    IDArray.push(answers.ID);
-                    makeTeam();
-                })
-            }
-        }) 
+            const engineer = new Engineer(answers.engineerName, answers.engineerID, answers.engineerEmail, answers.github);
+            teamArray.push(engineer);
+            IDArray.push(answers.engineerID);
+            makeTeam();
+            console.log(teamArray)
+            
+        })
 
 }
+
+
+// questions to create Intern
+function promptIntern() {
+    return inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "internName",
+                message: "Employee name"
+            },
+            {
+                type: "input",
+                name: "internID",
+                message: "Enter ID number",
+                validate: answer => {
+                    if (IDArray.includes(answer)) {
+                        return "This ID has been used.  Enter a different number";
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            {
+                type: "input",
+                name: "internEmail",
+                message: "What is the email address?"
+            },
+            {
+                type: "input",
+                name: "school",
+                message: "Name of school?"
+            }
+        ])
+        .then(answers => {
+            
+            const intern = new Intern(answers.internName, answers.internID, answers.internEmail, answers.school);
+            teamArray.push(intern);
+            IDArray.push(answers.internID);
+            makeTeam();
+            console.log(teamArray)
+            console.log(IDArray)
+        })
+
+}
+
 
 promptManager()
 
