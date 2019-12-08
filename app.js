@@ -6,7 +6,7 @@ const Engineer = require("./lib/Engineer.js");
 const Manager = require("./lib/Manager.js");
 const Intern = require("./lib/Intern.js");
 const path = require("path");
-// const render = require("render")
+const render = require("./lib/htmlrender.js");
 const outputPath = path.resolve(__dirname, "output", "team.html");
 
 IDArray = [];
@@ -70,6 +70,8 @@ function makeTeam() {
             if (answers.makeTeam) {
                 promptUser();
             } else {
+                createTeam();
+                
                 return;
             }
         })
@@ -134,7 +136,7 @@ function promptEngineer() {
             teamArray.push(engineer);
             IDArray.push(answers.engineerID);
             makeTeam();
-            console.log(teamArray)
+            
             
         })
 
@@ -179,14 +181,20 @@ function promptIntern() {
             teamArray.push(intern);
             IDArray.push(answers.internID);
             makeTeam();
-            console.log(teamArray)
-            console.log(IDArray)
+           
         })
 
 }
 
 
 promptManager()
+
+// creates team and outputs to team.html in Output directory
+function createTeam () {
+    fs.writeFileSync(outputPath, render(teamArray), "utf-8")
+}
+
+ 
 
 module.exports = IDArray, teamArray
 
